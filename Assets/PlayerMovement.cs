@@ -1,0 +1,28 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerMovement : MonoBehaviour
+{
+
+    [SerializeField] public float moveSpeed = 5f;
+    [SerializeField] public Rigidbody2D rb;
+    [SerializeField] public Camera cam;
+    Vector2 movement;
+    Vector2 mousePlacement;
+
+    void Update()
+    {
+        movement.x = Input.GetAxisRaw("Horizontal");
+        movement.y = Input.GetAxisRaw("Vertical");
+        mousePlacement = cam.ScreenToWorldPoint(Input.mousePosition);
+    }
+
+    void FixedUpdate()
+    {
+        rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
+        Vector2 lookDir = mousePlacement - rb.position;
+        float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
+        rb.rotation = angle;
+    }
+}
